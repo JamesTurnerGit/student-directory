@@ -17,10 +17,9 @@ students =[
 #options for different exercises that mess with the output too much to be
 #sensible
 
-
 def input_students
   puts "please enter the names of the students"
-  puts "To finish, just hit return twice"
+  puts "To finish, just hit return"
   students = []
   name = gets.chomp
   while !name.empty? do
@@ -38,7 +37,8 @@ end
 
 def print names,filter
   names.each_with_index do |student,index|
-    next if filter != student[:name][0] && filter
+    next if filter && filter != student[:name][0]
+    next if student[:name].length > 11
     puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
   end
 end
@@ -52,7 +52,6 @@ def exercise_2
   name = gets.chomp
   name == "" ? false : name[0].upcase
 end
-
 
 students = input_students
 filter = exercise_2
