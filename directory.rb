@@ -26,7 +26,7 @@ def print_out names,filter
     name_text  = "#{student[:name]}"
     cohort_text  = "(#{student[:cohort]} cohort)"
     hobby_text = student[:hobby] ? "hobbies :#{student[:hobby]}": ""
-    puts "#{index}. #{name_text} #{cohort_text} #{hobby_text}"
+    puts "#{(index.to_s + ".").ljust(3)} #{name_text.ljust(15)} #{cohort_text.ljust 20} #{hobby_text.ljust 20}"
     index += 1
   end
   return nil
