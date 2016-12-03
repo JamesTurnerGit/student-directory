@@ -1,3 +1,3 @@
 #student-directory
 
-> my first project written ongithub, Made using cygwin during the *Makers Academy* pre course 
+> my first project written on github, Made using cygwin during the *Makers Academy* pre course 
