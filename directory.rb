@@ -18,14 +18,15 @@ students =[
 #sensible
 
 def input_students
-  puts "please enter the names of the students"
+  puts "please enter the names of the students if you want to enter a hobby"
+  puts "put a comma then type the hobby"
   puts "To finish, just hit return"
   students = []
-  name = gets.chomp
-  while !name.empty? do
-    students << {name: name, cohort: :november}
+  input = gets.chomp.split(/,/)
+  while !input.empty? do
+    students << {name: input[0],hobby: input[1], cohort: :november}
     puts "Now we have #{students.count} students"
-    name = gets.chomp
+    input = gets.chomp
   end
   students
 end
@@ -35,29 +36,38 @@ def print_header
   puts "---------------"
 end
 
-def print names,filter
+def print_out names,filter
   index = 1
   while names.length > 0
-    student = names.pop
+    student = names.shift
     next if filter && filter != student[:name][0]
     next if student[:name].length > 11
-    puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+    name_text  = "#{student[:name]}"
+    cohort_text  = "(#{student[:cohort]} cohort)"
+    hobby_text = student[:hobby] ? "hobbies :#{student[:hobby]}": ""
+    puts "#{index}. #{name_text} #{cohort_text} #{hobby_text}"
     index += 1
   end
+  puts names
+  return nil
 end
 
 def print_footer names
+  puts names
   puts "Overall, we have #{names.count} great students"
 end
 
-def exercise_2
+def get_filter
   puts "Filter by what letter, leave blank for none"
   name = gets.chomp
   name == "" ? false : name[0].upcase
 end
 
 students = input_students
-filter = exercise_2
+filter_character = get_filter
+
 print_header
-print students ,filter
+puts students
+print_out (students , filter_character)
+puts students
 print_footer students
