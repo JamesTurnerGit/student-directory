@@ -13,6 +13,7 @@ students =[
   {name: "Joffrey Baratheon",           cohort: :november},
   {name: "Norman  Bates",               cohort: :november}]
 =end
+
 def input_students
   puts "please enter the names of the students"
   puts "To finish, just hit return twice"
@@ -32,8 +33,8 @@ def print_header
 end
 
 def print names
-  names.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  names.each_with_index do |student,index|
+    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
   end
 end
 
