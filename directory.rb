@@ -14,6 +14,10 @@ students =[
   {name: "Norman  Bates",               cohort: :november}]
 =end
 
+#options for different exercises that mess with the output too much to be
+#sensible
+
+
 def input_students
   puts "please enter the names of the students"
   puts "To finish, just hit return twice"
@@ -32,8 +36,9 @@ def print_header
   puts "---------------"
 end
 
-def print names
+def print names,filter
   names.each_with_index do |student,index|
+    next if filter != student[:name][0] && filter
     puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
   end
 end
@@ -42,7 +47,15 @@ def print_footer names
   puts "Overall, we have #{names.count} great students"
 end
 
+def exercise_2
+  puts "Filter by what letter, leave blank for none"
+  name = gets.chomp
+  name == "" ? false : name[0].upcase
+end
+
+
 students = input_students
+filter = exercise_2
 print_header
-print students
+print students ,filter
 print_footer students
