@@ -36,10 +36,13 @@ def print_header
 end
 
 def print names,filter
-  names.each_with_index do |student,index|
+  index = 1
+  while names.length > 0
+    student = names.pop
     next if filter && filter != student[:name][0]
     next if student[:name].length > 11
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+    index += 1
   end
 end
 
