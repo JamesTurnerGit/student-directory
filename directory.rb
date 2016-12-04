@@ -2,6 +2,8 @@
 @Default_file = "students.csv"
 @students = []
 
+require "csv"
+
 def input_students
   puts "please enter the names of the students. if you want to enter a hobby"
   puts "put a comma then type the hobby, same for cohort"
@@ -18,7 +20,7 @@ def input_students
 end
 
 def parse_student student
-  student = student.chomp.split(/,/)
+  student = student.split(",") if student.is_a? String
   student[2] = Time.now.strftime("%B").downcase  unless @Months.include?(student[2].to_s) # cohort
   @students << {name: student[0],hobby: student[1], cohort: student[2].to_sym}
 end
@@ -67,22 +69,20 @@ def show_students
   puts
 end
 
+
 def save_students filename = @Default_file
-  File.open filename, "w" do |file|
+  CSV.open(filename,"w") do |csv|
     @students.each do |student|
-      student_data = [student[:name],student[:hobby],student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      csv << [student[:name],student[:hobby],student[:cohort]]
     end
   end
   puts "saved to #{filename}."
 end
 
+
 def load_students filename = @Default_file
-  File.open filename, "r" do |file|
-    file.readlines.each do |line|
-      parse_student line
-    end
+  CSV.foreach(filename) do |row|
+    parse_student row
   end
   puts "Loaded #{@students.count} students from #{filename}."
 end
