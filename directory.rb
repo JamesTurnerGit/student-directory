@@ -5,11 +5,11 @@ def input_students
   puts "please enter the names of the students. if you want to enter a hobby"
   puts "put a comma then type the hobby, same for cohort"
   puts "To finish, just hit return"
-  input = gets.chomp.split(/,/)
+  input = STDIN.gets.chomp.split(/,/)
   while !input.empty? do
     input[2] = Time.now.strftime("%B").downcase  unless @Months.include?(input[2].to_s)
     @students << {name: input[0],hobby: input[1], cohort: input[2].to_sym}
-    puts "now, #{student_counter}"
+    puts "now, #{student_counter.downcase}"
     input = gets.chomp.split(/,/)
   end
 end
@@ -70,8 +70,8 @@ def save_students
   file.close
 end
 
-def load_students ##could have dupe students now....
-  file = File.open "students.csv", "r"
+def load_students filename = "students.csv"
+  file = File.open filename, "r"
   file.readlines.each do |line|
     name, hobby, cohort = line.chomp.split(",")
     @students << {name: name, hobby: hobby, cohort: cohort.to_sym}
@@ -82,7 +82,7 @@ end
 def print_menu
   puts
   puts "main menu"
-  puts "------------"
+  puts "---------------"
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the students"
@@ -107,8 +107,21 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets)
+    process(STDIN.gets)
   end
 end
 
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists? filename
+    load_students filename
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "file: #{filename} was not found."
+    exit
+  end
+end
+
+try_load_students
 interactive_menu
