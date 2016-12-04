@@ -60,12 +60,23 @@ def get_filter
   name == "" ? false : name[0].upcase
 end
 
+def save_students
+  file = File.open "students.csv", "w"
+  @students.each do |student|
+    student_data = [student[:name],student[:hobby],student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
 def print_menu
   puts
   puts "main menu"
   puts "------------"
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the students"
   puts "9. quit"
   puts
 end
@@ -75,6 +86,7 @@ def process selection
   case selection
   when 1 then input_students
   when 2 then show_students
+  when 3 then save_students
   when 9 then exit
   else
     puts "I don't know what you meant, try again"
