@@ -67,15 +67,15 @@ def show_students
   puts
 end
 
-def save_students
-  file = File.open @Default_file, "w"
+def save_students filename = @Default_file
+  file = File.open filename "w"
   @students.each do |student|
     student_data = [student[:name],student[:hobby],student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
   file.close
-  puts "saved to #{@Default_file}."
+  puts "saved to #{filename}."
 end
 
 def load_students filename = @Default_file
@@ -84,7 +84,7 @@ def load_students filename = @Default_file
     parse_student line
   end
   file.close
-  puts "Loaded #{@students.count} from #{filename}."
+  puts "Loaded #{@students.count} students from #{filename}."
 end
 
 def print_menu
@@ -99,13 +99,21 @@ def print_menu
   puts
 end
 
+def save_load_wrapper method
+  puts "enter filename to use, leave blank for Default"
+  input = STDIN.gets.chomp
+  input = @Default_file if input == ""
+  method.call(input)
+end
+
+
 def process selection
   selection = selection.chomp.to_i
   case selection
   when 1 then input_students
   when 2 then show_students
-  when 3 then save_students
-  when 4 then load_students
+  when 3 then save_load_wrapper method(:save_students)
+  when 4 then save_load_wrapper method(:load_students)
   when 9 then exit
   else
     puts "I don't know what you meant, try again"
