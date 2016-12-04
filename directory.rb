@@ -1,4 +1,5 @@
 @Months =["january","febuary","march","april","may","june","july","august","september","october","november","december"]
+@Default_file = "students.csv"
 @students = []
 
 def input_students
@@ -17,7 +18,6 @@ end
 
 def parse_student student
   student = student.chomp.split(/,/)
-  student[1] = !student[1].nil? && student[1] != "" ? "hobbies :#{student[1]}": "" # hobby
   student[2] = Time.now.strftime("%B").downcase  unless @Months.include?(student[2].to_s) # cohort
   @students << {name: student[0],hobby: student[1], cohort: student[2].to_sym}
 end
@@ -40,7 +40,7 @@ def print_students_list filter = nil
     number_text = (index.to_s + ".").ljust 3
     name_text = student[:name].ljust 30
     cohort_text = student[:cohort].to_s.ljust 15
-    hobby_text = student[:hobby]
+    hobby_text = !student[:hobby].nil? && student[:hobby] != "" ? "hobbies :#{student[:hobby]}": ""
     puts "#{number_text} #{name_text} #{cohort_text} #{hobby_text}"
     index += 1
   end
@@ -70,7 +70,7 @@ def get_filter
 end
 
 def save_students
-  file = File.open "students.csv", "w"
+  file = File.open @Default_file, "w"
   @students.each do |student|
     student_data = [student[:name],student[:hobby],student[:cohort]]
     csv_line = student_data.join(",")
@@ -79,7 +79,7 @@ def save_students
   file.close
 end
 
-def load_students filename = "students.csv"
+def load_students filename = @Default_file
   file = File.open filename, "r"
   file.readlines.each do |line|
     parse_student line
@@ -121,7 +121,7 @@ end
 
 def try_load_students
   filename = ARGV.first
-  return if filename.nil?
+  filename ||= @Default_file
   if File.exists? filename
     load_students filename
     puts "Loaded #{@students.count} from #{filename}"
