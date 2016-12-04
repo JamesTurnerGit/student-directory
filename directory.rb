@@ -1,5 +1,4 @@
 =begin
-In the input_students method the cohort value is hard-coded. How can you ask for both the name and the cohort? What if one of the values is empty? Can you supply a default value? The input will be given to you as a string? How will you convert it to a symbol? What if the user makes a typo?
 
 Once you complete the previous exercise, change the way the users are displayed: print them grouped by cohorts. To do this, you'll need to get a list of all existing cohorts (the map() method may be useful but it's not the only option), iterate over it and only print the students from that cohort.
 
@@ -18,10 +17,10 @@ def input_students
   students = []
   input = gets.chomp.split(/,/)
   while !input.empty? do
-    input[2] ||= Time.now.strftime("%B").downcase # default for cohort is this month
-    students << {name: input[0],hobby: input[1], cohort: input[2]}
+    input[2] = Time.now.strftime("%B").downcase  unless ["january","febuary","march","april","may","june","july","august","september","october","november","december"].include?(input[2].to_s)
+    students << {name: input[0],hobby: input[1], cohort: input[2].to_sym}
     puts "Now we have #{students.count} students"
-    input = gets.chomp
+    input = gets.chomp.split(/,/)
   end
   students
 end
@@ -36,8 +35,8 @@ def print_out names,filter
   while names.length > 0
     student = names.shift
     next if filter && filter != student[:name][0]
-    next if student[:name].length > 11
-    name_text  = "#{student[:name]}".ljust 15
+    next if student[:name].length > 30
+    name_text  = "#{student[:name]}".ljust 30
     cohort_text  = "(#{student[:cohort]} cohort)".ljust 20
     hobby_text = student[:hobby] ? "hobbies :#{student[:hobby]}": ""
     puts "#{(index.to_s + ".").ljust(3)} #{name_text} #{cohort_text} #{hobby_text}"
