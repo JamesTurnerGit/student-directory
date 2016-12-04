@@ -19,6 +19,24 @@ def input_students
   puts "done inputting students"
 end
 
+def sort_students
+  #by months
+  students_in_months = []
+  @Months.each_with_index do |month,index|
+    students_in_months << @students.select{|student| student[:cohort] == month.to_sym}
+  end
+  #by name
+  students_in_months.map! do |month|
+    month.sort{|a,b| a[:name] <=> b[:name]}
+  end
+  #rebuild list
+  @students = []
+  @Months.each_with_index do |month,index|
+    @students << students_in_months[index]
+  end
+  @students.flatten!
+end
+
 def parse_student student
   student = student.split(",") if student.is_a? String
   student[2] = Time.now.strftime("%B").downcase  unless @Months.include?(student[2].to_s) # cohort
@@ -45,9 +63,7 @@ def check_filters student, filter = nil
 end
 
 def print_students_list filter = nil
-  @students = @students.sort do |x,y|
-     @Months.find_index(x[:cohort].to_s) <=> @Months.find_index(y[:cohort].to_s)
-  end
+  sort_students
   @students.each_with_index do |student,index|
     print_single_student (index + 1),student if check_filters student,filter
   end
