@@ -68,22 +68,22 @@ def show_students
 end
 
 def save_students filename = @Default_file
-  file = File.open filename "w"
-  @students.each do |student|
-    student_data = [student[:name],student[:hobby],student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  File.open filename, "w" do |file|
+    @students.each do |student|
+      student_data = [student[:name],student[:hobby],student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
   end
-  file.close
   puts "saved to #{filename}."
 end
 
 def load_students filename = @Default_file
-  file = File.open filename, "r"
-  file.readlines.each do |line|
-    parse_student line
+  File.open filename, "r" do |file|
+    file.readlines.each do |line|
+      parse_student line
+    end
   end
-  file.close
   puts "Loaded #{@students.count} students from #{filename}."
 end
 
