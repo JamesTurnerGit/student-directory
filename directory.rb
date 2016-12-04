@@ -70,6 +70,15 @@ def save_students
   file.close
 end
 
+def load_students ##could have dupe students now....
+  file = File.open "students.csv", "r"
+  file.readlines.each do |line|
+    name, hobby, cohort = line.chomp.split(",")
+    @students << {name: name, hobby: hobby, cohort: cohort.to_sym}
+  end
+  file.close
+end
+
 def print_menu
   puts
   puts "main menu"
@@ -77,6 +86,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the students"
+  puts "4. loads students from file"
   puts "9. quit"
   puts
 end
@@ -87,6 +97,7 @@ def process selection
   when 1 then input_students
   when 2 then show_students
   when 3 then save_students
+  when 4 then load_students
   when 9 then exit
   else
     puts "I don't know what you meant, try again"
