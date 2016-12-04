@@ -1,7 +1,3 @@
-=begin
-What happens if the user doesn't enter any students? It will try to print an empty list. How can you use an if statement (:pill: Control Flow) to only print the list if there is at least one student in there?
-=end
-
 @Months =["january","febuary","march","april","may","june","july","august","september","october","november","december"]
 
 def input_students
@@ -65,9 +61,30 @@ def get_filter
   name == "" ? false : name[0].upcase
 end
 
-students = input_students
-filter_character = get_filter
 
-print_header
-print_out(students.clone ,filter_character)
-print_footer students
+def interactive_menu
+  filter_character = nil ## will fix or remove this later
+  students = []
+  loop do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. quit"
+    input = gets.to_i
+    case input
+    when 1
+      students = input_students
+    when 2
+      puts 
+      print_header
+      print_out(students.clone ,filter_character)
+      print_footer students
+      puts
+    when 9
+      exit # this will cause the program to terminate
+    else
+      puts "I don't know what you meant, try again"
+    end
+  end
+end
+
+interactive_menu
