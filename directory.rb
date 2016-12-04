@@ -14,12 +14,12 @@ def input_students
   puts "put a comma then type the hobby, same for cohort"
   puts "To finish, just hit return"
   students = []
-  input = gets.chomp.split(/,/)
+  input = gets.gsub(/\n/,"").split(/,/)
   while !input.empty? do
     input[2] = Time.now.strftime("%B").downcase  unless @Months.include?(input[2].to_s)
     students << {name: input[0],hobby: input[1], cohort: input[2].to_sym}
     puts "now, #{student_counter(students)}"
-    input = gets.chomp.split(/,/)
+    input = gets.gsub(/\n/,"").split(/,/)
   end
   students
 end
