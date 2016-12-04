@@ -1,9 +1,4 @@
 =begin
-We've been using the chomp() method to get rid of the last return character. Find another method among those provided by the String class that could be used for the same purpose (although it will require passing some arguments).
-#gsub
-
-Once you have completed the "Asking for user input" section, open this file. It's Ruby code but it has some typos. Copy it to a local file and open it in Atom without syntax highlighting. To do this, select "Plain Text" in the lower right corner of the window. It should look similar to this: rubysyntaxhighlighting Now, find all typos in that file and correct them. Use your experience, online documentation, etc. to find all mistakes. Run the script in the terminal from time to time to make sure it works as it should. Google the errors Ruby will give you, think about what they could mean, try different things but don't look the answer up :)
-
 What happens if the user doesn't enter any students? It will try to print an empty list. How can you use an if statement (:pill: Control Flow) to only print the list if there is at least one student in there?
 =end
 
@@ -21,7 +16,12 @@ def input_students
     puts "now, #{student_counter(students)}"
     input = gets.gsub(/\n/,"").split(/,/)
   end
-  students
+  if students.empty?
+     puts student_counter students
+     exit
+  else
+     students
+  end
 end
 
 def student_counter names
