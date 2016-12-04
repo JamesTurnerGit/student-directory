@@ -27,24 +27,27 @@ def print_header
   puts "---------------"
 end
 
+def print_single_student index, student
+  number_text = (index.to_s + ".").ljust 3
+  name_text   = student[:name].ljust 20
+  cohort_text = "(#{student[:cohort].to_s} cohort)".ljust 20
+  hobby_text  = !student[:hobby].nil? && student[:hobby] != "" ? "hobbies :#{student[:hobby]}": ""
+  puts "#{number_text} #{name_text} #{cohort_text} #{hobby_text}"
+end
+
+def check_filters student, filter = nil
+  return false if filter && filter != student[:name][0]
+  return false if student[:name].length > 20
+  true
+end
+
 def print_students_list filter = nil
-  names = @students.clone
-  index = 1
-  while names.length > 0
-    names = names.sort do |x,y|
-       @Months.find_index(x[:cohort].to_s) <=> @Months.find_index(y[:cohort].to_s)
-    end
-    student = names.shift
-    next if filter && filter != student[:name][0]
-    next if student[:name].length > 30
-    number_text = (index.to_s + ".").ljust 3
-    name_text = student[:name].ljust 30
-    cohort_text = student[:cohort].to_s.ljust 15
-    hobby_text = !student[:hobby].nil? && student[:hobby] != "" ? "hobbies :#{student[:hobby]}": ""
-    puts "#{number_text} #{name_text} #{cohort_text} #{hobby_text}"
-    index += 1
+  @students = @students.sort do |x,y|
+     @Months.find_index(x[:cohort].to_s) <=> @Months.find_index(y[:cohort].to_s)
   end
-  return nil
+  @students.each_with_index do |student,index|
+    print_single_student (index + 1),student if check_filters student,filter
+  end
 end
 
 def student_counter
