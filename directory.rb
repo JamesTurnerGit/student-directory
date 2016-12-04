@@ -5,13 +5,21 @@ def input_students
   puts "please enter the names of the students. if you want to enter a hobby"
   puts "put a comma then type the hobby, same for cohort"
   puts "To finish, just hit return"
-  input = STDIN.gets.chomp.split(/,/)
+  puts
+  input = STDIN.gets
   while !input.empty? do
-    input[2] = Time.now.strftime("%B").downcase  unless @Months.include?(input[2].to_s)
-    @students << {name: input[0],hobby: input[1], cohort: input[2].to_sym}
+    parse_student input
     puts "now, #{student_counter.downcase}"
-    input = gets.chomp.split(/,/)
+    puts
+    input = STDIN.gets.chomp
   end
+end
+
+def parse_student student
+  student = student.chomp.split(/,/)
+  student[1] = !student[1].nil? && student[1] != "" ? "hobbies :#{student[1]}": "" # hobby
+  student[2] = Time.now.strftime("%B").downcase  unless @Months.include?(student[2].to_s) # cohort
+  @students << {name: student[0],hobby: student[1], cohort: student[2].to_sym}
 end
 
 def print_header
@@ -29,10 +37,11 @@ def print_students_list filter = nil
     student = names.shift
     next if filter && filter != student[:name][0]
     next if student[:name].length > 30
-    name_text  = "#{student[:name]}".ljust 30
-    cohort_text  = "(#{student[:cohort]} cohort)".ljust 20
-    hobby_text = student[:hobby] && student[:hobby] != "" ? "hobbies :#{student[:hobby]}": ""
-    puts "#{(index.to_s + ".").ljust(3)} #{name_text} #{cohort_text} #{hobby_text}"
+    number_text = (index.to_s + ".").ljust 3
+    name_text = student[:name].ljust 30
+    cohort_text = student[:cohort].to_s.ljust 15
+    hobby_text = student[:hobby]
+    puts "#{number_text} #{name_text} #{cohort_text} #{hobby_text}"
     index += 1
   end
   return nil
@@ -73,8 +82,7 @@ end
 def load_students filename = "students.csv"
   file = File.open filename, "r"
   file.readlines.each do |line|
-    name, hobby, cohort = line.chomp.split(",")
-    @students << {name: name, hobby: hobby, cohort: cohort.to_sym}
+    parse_student line
   end
   file.close
 end
