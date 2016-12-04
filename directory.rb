@@ -1,30 +1,16 @@
 @Months =["january","febuary","march","april","may","june","july","august","september","october","november","december"]
+@students = []
 
 def input_students
   puts "please enter the names of the students. if you want to enter a hobby"
   puts "put a comma then type the hobby, same for cohort"
   puts "To finish, just hit return"
-  students = []
-  input = gets.gsub(/\n/,"").split(/,/)
+  input = gets.chomp.split(/,/)
   while !input.empty? do
     input[2] = Time.now.strftime("%B").downcase  unless @Months.include?(input[2].to_s)
-    students << {name: input[0],hobby: input[1], cohort: input[2].to_sym}
-    puts "now, #{student_counter(students)}"
-    input = gets.gsub(/\n/,"").split(/,/)
-  end
-  if students.empty?
-     puts student_counter students
-     exit
-  else
-     students
-  end
-end
-
-def student_counter names
-  case names.length
-  when 1 then return "We have 1 great student"
-  when 0 then return "We have no students?"
-  else "Overall, we have #{names.count} great students"
+    @students << {name: input[0],hobby: input[1], cohort: input[2].to_sym}
+    puts "now, #{student_counter}"
+    input = gets.chomp.split(/,/)
   end
 end
 
@@ -33,7 +19,8 @@ def print_header
   puts "---------------"
 end
 
-def print_out names,filter
+def print_students_list filter = nil
+  names = @students.clone
   index = 1
   while names.length > 0
     names = names.sort do |x,y|
@@ -51,8 +38,20 @@ def print_out names,filter
   return nil
 end
 
-def print_footer names
-  puts student_counter names
+def student_counter
+  case @students.length
+  when 1 then return "We have 1 great student"
+  when 0 then return "We have no students?"
+  else "Overall, we have #{@students.count} great students"
+  end
+end
+
+def show_students
+  puts
+  print_header
+  print_students_list
+  puts student_counter
+  puts
 end
 
 def get_filter
@@ -61,29 +60,31 @@ def get_filter
   name == "" ? false : name[0].upcase
 end
 
+def print_menu
+  puts
+  puts "main menu"
+  puts "------------"
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. quit"
+  puts
+end
+
+def process selection
+  selection = selection.chomp.to_i
+  case selection
+  when 1 then input_students
+  when 2 then show_students
+  when 9 then exit
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
 
 def interactive_menu
-  filter_character = nil ## will fix or remove this later
-  students = []
   loop do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. quit"
-    input = gets.to_i
-    case input
-    when 1
-      students = input_students
-    when 2
-      puts 
-      print_header
-      print_out(students.clone ,filter_character)
-      print_footer students
-      puts
-    when 9
-      exit # this will cause the program to terminate
-    else
-      puts "I don't know what you meant, try again"
-    end
+    print_menu
+    process(gets)
   end
 end
 
