@@ -1,6 +1,4 @@
 =begin
-Right now if we have only one student, the user will see a message "Now we have 1 students", whereas it should be "Now we have 1 student". How can you fix it so that it used singular form when appropriate and plural form otherwise?
-
 We've been using the chomp() method to get rid of the last return character. Find another method among those provided by the String class that could be used for the same purpose (although it will require passing some arguments).
 #gsub
 
@@ -20,10 +18,18 @@ def input_students
   while !input.empty? do
     input[2] = Time.now.strftime("%B").downcase  unless @Months.include?(input[2].to_s)
     students << {name: input[0],hobby: input[1], cohort: input[2].to_sym}
-    puts "Now we have #{students.count} students"
+    puts "now, #{student_counter(students)}"
     input = gets.chomp.split(/,/)
   end
   students
+end
+
+def student_counter names
+  case names.length
+  when 1 then return "We have 1 great student"
+  when 0 then return "We have no students?"
+  else "Overall, we have #{names.count} great students"
+  end
 end
 
 def print_header
@@ -50,7 +56,7 @@ def print_out names,filter
 end
 
 def print_footer names
-  puts "Overall, we have #{names.count} great students"
+  puts student_counter names
 end
 
 def get_filter
