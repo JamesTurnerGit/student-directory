@@ -14,6 +14,7 @@ def input_students
     puts
     input = STDIN.gets.chomp
   end
+  puts "done inputting students"
 end
 
 def parse_student student
@@ -66,12 +67,6 @@ def show_students
   puts
 end
 
-def get_filter
-  puts "Filter by what letter, leave blank for none"
-  name = gets.chomp
-  name == "" ? false : name[0].upcase
-end
-
 def save_students
   file = File.open @Default_file, "w"
   @students.each do |student|
@@ -80,6 +75,7 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "saved to #{@Default_file}."
 end
 
 def load_students filename = @Default_file
@@ -88,6 +84,7 @@ def load_students filename = @Default_file
     parse_student line
   end
   file.close
+  puts "Loaded #{@students.count} from #{filename}."
 end
 
 def print_menu
@@ -127,7 +124,6 @@ def try_load_students
   filename ||= @Default_file
   if File.exists? filename
     load_students filename
-    puts "Loaded #{@students.count} from #{filename}"
   else
     puts "file: #{filename} was not found."
     exit
