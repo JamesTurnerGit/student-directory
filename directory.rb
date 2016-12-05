@@ -85,7 +85,6 @@ def show_students
   puts
 end
 
-
 def save_students filename = @Default_file
   CSV.open(filename,"w") do |csv|
     @students.each do |student|
@@ -121,7 +120,6 @@ def save_load_wrapper method
   input = @Default_file if input == ""
   method.call(input)
 end
-
 
 def process selection
   selection = selection.chomp.to_i
